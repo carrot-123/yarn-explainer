@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D3 Visualization</title>
+    <link rel="stylesheet" type="image/x-icon" href="./style.css" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+      /* Add some basic styles */
+      .bar {
+        fill: steelblue;
+      }
+      .axis-label {
+        font-size: 12px;
+      }
+      .chart-container {
+        font-family: Arial, sans-serif;
+      }
+      .tooltip {
+        position: absolute;
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 8px;
+        border-radius: 4px;
+        pointer-events: none;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Fiber Co-occurrence Chart</h1>
+    <label for="fiber-select">Select Fiber:</label>
+    <select id="fiber-select"></select>
+    <svg width="800" height="600"></svg>
+    <script src="app.js"></script>
+  </body>
+</html>
