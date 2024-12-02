@@ -24,13 +24,45 @@
         pointer-events: none;
         font-size: 12px;
       }
+      #filters {
+        margin: 10px 0;
+      }
+      #filters div {
+        display: inline-block;
+        margin-right: 10px;
+      }
+      #filters label {
+        margin-left: 5px;
+      }
     </style>
   </head>
   <body>
-    <h1>Fiber Co-occurrence Chart</h1>
+    <h1>Yarn Explainer</h1>
+    <h1>Which Fibers are Blended Together?</h1>
+    <div>
+      We can see the most popular fiber pairings. If we look at the most popular
+      pairing for each fiber, we can see that there are (x) synthetic-synthetic
+      pairings, (y) natural-natural pairings, and (z) synthetic-natural
+      pairings.
+    </div>
     <label for="fiber-select">Select Fiber:</label>
     <select id="fiber-select"></select>
-    <svg width="800" height="600"></svg>
+    <svg id="vis1" width="800" height="600"></svg>
+    <h1>Which Fibers are Highly Rated?</h1>
+    <div>
+      Some fibers, such as Nylon, will receive higher ratings the less they are
+      apparent in the fabric.
+    </div>
+    <label for="fiber-select-2">Select Fiber:</label>
+    <select id="fiber-select-2"></select>
+    <svg id="vis2" width="800" height="600"></svg>
+    <h1>Which Fibers are Machine Washable?</h1>
+    <div>
+      I wanted to see if a higher percentage of synthetic fibers meant that a
+      garment was "more" machine washable.
+    </div>
+    <div id="filters"></div>
+    <svg id="vis3" width="800" height="600"></svg>
     <script src="app.js"></script>
   </body>
 </html>
