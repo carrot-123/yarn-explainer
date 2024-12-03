@@ -4,60 +4,116 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>D3 Visualization</title>
-    <link rel="stylesheet" type="image/x-icon" href="./style.css" />
+    <link rel="stylesheet" href="./style.css" />
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <style>
-      /* Add some basic styles */
-
-      .axis-label {
-        font-size: 12px;
-      }
-      .chart-container {
-        font-family: Arial, sans-serif;
-      }
-      .tooltip {
-        position: absolute;
-        background-color: white;
-        border: 1px solid #ccc;
-        padding: 8px;
-        border-radius: 4px;
-        pointer-events: none;
-        font-size: 12px;
-      }
-      #filters {
-        margin: 10px 0;
-      }
-      #filters div {
-        display: inline-block;
-        margin-right: 10px;
-      }
-      #filters label {
-        margin-left: 5px;
-      }
-    </style>
   </head>
   <body>
     <h1>Yarn Explainer</h1>
-    <h1>Which Fibers are Blended Together?</h1>
     <div>
       We can see the most popular fiber pairings. If we look at the most popular
       pairing for each fiber, we can see that there are (x) synthetic-synthetic
       pairings, (y) natural-natural pairings, and (z) synthetic-natural
       pairings.
     </div>
-    <label for="fiber-select">Select Fiber:</label>
-    <select id="fiber-select"></select>
+    <h1>Which Fibers are Blended Together?</h1>
+    <div class="button-filters" id="vis1-buttons">
+      <div class="label-container">
+        <span class="button-labels">Synthetic Fibers</span>
+        <span class="button-labels">Natural Fibers</span>
+      </div>
+
+      <div class="button-container">
+        <div class="synthetic-buttons">
+          <button data-filter="Acrylic">Acrylic</button>
+          <button data-filter="Nylon">Nylon</button>
+          <button data-filter="Polyester">Polyester</button>
+          <button data-filter="Rayon">Rayon</button>
+        </div>
+
+        <div class="natural-buttons">
+          <button data-filter="Alpaca">Alpaca</button>
+          <button data-filter="Cashmere">Cashmere</button>
+          <button data-filter="Cotton">Cotton</button>
+
+          <button data-filter="Merino">Merino</button>
+          <button data-filter="Mohair">Mohair</button>
+          <button data-filter="Silk">Silk</button>
+          <button data-filter="Wool">Wool</button>
+        </div>
+      </div>
+      </div>
+   
+    
     <svg id="vis1" width="800" height="600"></svg>
-    <h1>Which Fibers are Highly Rated?</h1>
     <div>
-      Some fibers, such as Nylon, will receive higher ratings the less they are
-      apparent in the fabric.
+      Some fibers, such as Nylon, will receive higher ratings the less they
+      are apparent in the fabric.
     </div>
-    <label for="fiber-select-2">Select Fiber:</label>
-    <select id="fiber-select-2"></select>
-    <svg id="vis2" width="800" height="600"></svg>
-    <h1>Which Fibers are Machine Washable?</h1>
-    <div>
+    <h1>Which Fibers are Highly Rated?</h1>
+    <div class="vis">
+
+    
+    <div class="button-filters" id="vis2-buttons">
+      <div class="label-container">
+        <span class="button-labels">Synthetic Fibers</span>
+        <span class="button-labels">Natural Fibers</span>
+        
+      </div>
+
+      <div class="button-container">
+        <div class="synthetic-buttons">
+          <button data-filter="Acrylic">Acrylic</button>
+          <button data-filter="Nylon">Nylon</button>
+          <button data-filter="Polyester">Polyester</button>
+          <button data-filter="Rayon">Rayon</button>
+        </div>
+
+        <div class="natural-buttons">
+          <button data-filter="Alpaca">Alpaca</button>
+          <button data-filter="Cashmere">Cashmere</button>
+          <button data-filter="Cotton">Cotton</button>
+
+          <button data-filter="Merino">Merino</button>
+          <button data-filter="Mohair">Mohair</button>
+          <button data-filter="Silk">Silk</button>
+          <button data-filter="Wool">Wool</button>
+        </div>
+      </div>
+      </div>
+
+    </div>
+      
+      <svg id="vis2" width="800" height="600"></svg>
+      <h1>Which Fibers are Machine Washable?</h1>
+
+      <div class="button-filters" id="vis3-buttons">
+        <div class="label-container">
+          <span class="button-labels">Synthetic Fibers</span>
+          <span class="button-labels">Natural Fibers</span>
+          <button data-filter="all">All</button>
+        </div>
+
+        <div class="button-container">
+          <div class="synthetic-buttons">
+            <button data-filter="Acrylic">Acrylic</button>
+            <button data-filter="Nylon">Nylon</button>
+            <button data-filter="Polyester">Polyester</button>
+            <button data-filter="Rayon">Rayon</button>
+          </div>
+
+          <div class="natural-buttons">
+            <button data-filter="Alpaca">Alpaca</button>
+            <button data-filter="Cashmere">Cashmere</button>
+            <button data-filter="Cotton">Cotton</button>
+
+            <button data-filter="Merino">Merino</button>
+            <button data-filter="Mohair">Mohair</button>
+            <button data-filter="Silk">Silk</button>
+            <button data-filter="Wool">Wool</button>
+          </div>
+        </div>
+      </div>
+
       I wanted to see if a higher percentage of synthetic fibers meant that a
       garment was "more" machine washable.
     </div>
