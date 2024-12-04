@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>D3 Visualization</title>
     <link rel="stylesheet" href="./style.css" />
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
     <script src="https://d3js.org/d3.v7.min.js"></script>
   </head>
   <body>
@@ -25,7 +27,7 @@
       <div class="button-container">
         <div class="synthetic-buttons">
           <button data-filter="Acrylic">Acrylic</button>
-          <button data-filter="Nylon">Nylon</button>
+          <button data-filter="Nylon" class="active-button">Nylon</button>
           <button data-filter="Polyester">Polyester</button>
           <button data-filter="Rayon">Rayon</button>
         </div>
@@ -63,7 +65,7 @@
       <div class="button-container">
         <div class="synthetic-buttons">
           <button data-filter="Acrylic">Acrylic</button>
-          <button data-filter="Nylon">Nylon</button>
+          <button data-filter="Nylon" class="active-button">Nylon</button>
           <button data-filter="Polyester">Polyester</button>
           <button data-filter="Rayon">Rayon</button>
         </div>
@@ -90,13 +92,13 @@
         <div class="label-container">
           <span class="button-labels">Synthetic Fibers</span>
           <span class="button-labels">Natural Fibers</span>
-          <button data-filter="all">All</button>
+        
         </div>
 
         <div class="button-container">
           <div class="synthetic-buttons">
             <button data-filter="Acrylic">Acrylic</button>
-            <button data-filter="Nylon">Nylon</button>
+            <button data-filter="Nylon" >Nylon</button>
             <button data-filter="Polyester">Polyester</button>
             <button data-filter="Rayon">Rayon</button>
           </div>
@@ -109,7 +111,7 @@
             <button data-filter="Merino">Merino</button>
             <button data-filter="Mohair">Mohair</button>
             <button data-filter="Silk">Silk</button>
-            <button data-filter="Wool">Wool</button>
+            <button data-filter="Wool" class="active-button">Wool</button>
           </div>
         </div>
       </div>

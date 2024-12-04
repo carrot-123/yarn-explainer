@@ -29,7 +29,9 @@
 .label-container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
 }
 .button-container {
   display: flex;
@@ -39,15 +41,44 @@
 
 button {
   width: 5rem;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #80b1d3;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  font-family: "Lato";
+  font-size: small;
 }
 button.active {
-  background-color: #4caf50; /* Active background color */
+  background: #80b1d3; /* Active background color */
   color: #fff; /* Active text color */
+  border-radius: 8px;
+  border: 1px solid #80b1d3;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  font-family: "Lato";
+  font-size: small;
 }
 body {
-  margin-left: 20rem;
-  margin-right: 20rem;
+  margin-left: 30rem;
+  margin-right: 30rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+h1 {
+  font-family: "Montserrat";
+}
+body {
+  font-family: "Lato";
+  font-size: medium;
+}
+.axis-style {
+  font-family: "Lato";
+  font-size: small;
+}
+
+text {
+  font-family: "Lato";
+  font-size: small;
 }

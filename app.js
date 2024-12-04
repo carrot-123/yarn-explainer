@@ -71,7 +71,11 @@ data = Promise.all([
       yarnRatings.set(d.id, d.rating_average);
     }
     yarnDataMap.set(d.id, d);
-    if (fiberDataMap[d.id] && d.discontinued === "FALSE") {
+    if (
+      fiberDataMap[d.id] &&
+      d.discontinued === "FALSE" &&
+      (d.machine_washable === "TRUE" || d.machine_washable === "FALSE")
+    ) {
       fiberWash[d.id] = { ...d, fibers: fiberDataMap[d.id] };
     }
     //fiberWash[d.id] = { ...d, fibers: fiberDataMap[d.id] || [] };
@@ -188,11 +192,8 @@ data = Promise.all([
     }
   }
 
-  // Step 3: Create the scatterplot
-  //createScatterplot(yarnPoints);
-  console.log("hi");
   //console.log(yarnBlend);
-
+  d3.selectAll(".active-button").classed("active", true);
   createSplitBarchart(yarnBlend);
   createRatingsChart(fiberRatings);
   createWashScatterplot(fiberWash);
@@ -212,7 +213,6 @@ function calculatePercentage(yarnData, fiberSource) {
   });
 }
 function createWashScatterplot(fiberWash) {
-  //console.log(fiberWash);
   const fiberSource = {
     Nylon: "Synthetic",
     Other: "Other",
@@ -253,18 +253,9 @@ function createWashScatterplot(fiberWash) {
     }, {});
   const yarnData = calculatePercentage(yarnTemp2, fiberSource);
 
-  // D3 Scatterplot Setup
-
-  /*const svg = d3.select("#vis3");
-  const width = +svg.attr("width");
-  const height = +svg.attr("height");
-  const margin = { top: 20, right: 30, bottom: 30, left: 40 };
-
-  const plotWidth = width - margin.left - margin.right;
-  const plotHeight = height - margin.top - margin.bottom;*/
   const width = 1000;
   const height = 600;
-  const margin = { top: 20, right: 30, bottom: 20, left: 50 };
+  const margin = { top: 20, right: 30, bottom: 20, left: 20 };
 
   const svg = d3.select("#vis3").attr("width", width).attr("height", height);
 
@@ -305,16 +296,18 @@ function createWashScatterplot(fiberWash) {
   // Add x-axis
   g.append("g")
     .attr("transform", `translate(0,${chartHeight})`)
+    .attr("class", "axis-style")
     .call(xAxis)
     .append("text")
     .attr("x", chartWidth / 2)
-    .attr("y", 30)
+    .attr("y", 40)
     .attr("fill", "black")
     .attr("text-anchor", "middle")
     .text("Synthetic Fiber Percentage");
 
   g.append("g")
     .attr("transform", `translate(0,0)`)
+    .attr("class", "axis-style")
     .call(upxAxis)
     .append("text")
     .attr("x", chartWidth / 2)
@@ -323,32 +316,6 @@ function createWashScatterplot(fiberWash) {
     .attr("text-anchor", "middle")
     .text("Natural Fiber Percentage");
 
-  // Add y-axis
-  //g.append("g").call(yAxis);
-
-  // Plot points
-  /*g.selectAll("circle")
-    .data(yarnData)
-    .join("circle")
-    .attr("cx", (d) => xScale(d.syntheticPercentage))
-    .attr("cy", (d) => yScale(d.id))
-    .attr("r", 5)
-    .attr("fill", "steelblue");*/
-  /*.on("mouseover", (event, d) => {
-      svg
-        .append("text")
-        .attr("class", "ptLabel")
-        .attr("x", xScale(d.syntheticPercentage))
-        .attr("y", yScale(d.id))
-        .text(
-          Object.entries(d.details)
-            .map((f) => `${f.fiber_type_name}: ${f.percentage}%`)
-            .join("<br>")
-        );
-    })
-    .on("mouseout", () => {
-      svg.selectAll(".ptLabel").remove();
-    });*/
   const legend = svg
     .append("g")
     .attr("class", "legend")
@@ -362,10 +329,11 @@ function createWashScatterplot(fiberWash) {
     .attr("cx", 0)
     .attr("cy", 0)
     .attr("r", 6)
-    .attr("fill", "blue");
+    .attr("fill", "#80b1d3"); //blue
 
   legend
     .append("text")
+
     .attr("x", 10)
     .attr("y", 4)
     .text("Washable")
@@ -376,10 +344,11 @@ function createWashScatterplot(fiberWash) {
     .attr("cx", 0)
     .attr("cy", 20)
     .attr("r", 6)
-    .attr("fill", "red");
+    .attr("fill", "#fb8072"); // red
 
   legend
     .append("text")
+
     .attr("x", 10)
     .attr("y", 24)
     .text("Not Washable")
@@ -397,37 +366,6 @@ function createWashScatterplot(fiberWash) {
     .style("visibility", "hidden")
     .style("font-size", "12px");
 
-  /*function createRadioButtons(fibers, containerId, callback) {
-    const container = d3.select(containerId);
-    container.selectAll("*").remove(); // Clear previous buttons if any
-
-    // Add a "Show All" option
-    const allOption = container.append("div");
-    allOption
-      .append("input")
-      .attr("type", "radio")
-      .attr("id", "all")
-      .attr("name", "fiberFilter")
-      .attr("value", "all")
-      .property("checked", true) // Default to "Show All"
-      .on("change", () => callback("all"));
-
-    allOption.append("label").attr("for", "all").text("Show All");
-
-    // Add a radio button for each fiber
-    fibers.forEach((fiber) => {
-      const option = container.append("div");
-      option
-        .append("input")
-        .attr("type", "radio")
-        .attr("id", fiber)
-        .attr("name", "fiberFilter")
-        .attr("value", fiber)
-        .on("change", () => callback(fiber));
-
-      option.append("label").attr("for", fiber).text(fiber);
-    });
-  }*/
   function calculateMedian(data) {
     const washableData = data.filter((d) => d.details.machine_washable);
     const sortedSynthetic = washableData
@@ -441,23 +379,119 @@ function createWashScatterplot(fiberWash) {
   }
 
   // Function to update scatterplot based on selected fiber
-  function updateChart(selectedFiber) {
-    const filteredData =
+  function updateChart() {
+    const buttons = d3
+      .select("#vis3-buttons")
+      .selectAll(".button-container button, .label-container button");
+    const activeFibers = buttons
+      .filter(function () {
+        return d3.select(this).classed("active");
+      })
+      .nodes() // Get the filtered DOM nodes
+      .map((button) => button.getAttribute("data-filter")); //.data.filter;this.dataset.filter
+    /*d3.select(this).classed("active") === "true"*/
+
+    /*const filteredData = yarnData.filter((d) =>
+      d.details.fibers.some((fiber) =>
+        activeFibers.every((activeFiber) =>
+          d.details.fibers.includes(activeFiber)
+        )
+      )
+    );*/
+    /*const filteredData = yarnData.filter((yarn) =>
+      
+      activeFibers.every((activeFiber) =>
+        yarn.details.fibers.includes(activeFiber)
+      )
+    );*/
+    const filteredData = yarnData.filter((yarn) => {
+      // Get all fiber values from the Map
+      const fiberNames = yarn.details.fibers.map(
+        (fiber) => fiber.fiber_type_name
+      );
+
+      // Check if all active fibers are in the fiberNames array
+      return activeFibers.every((activeFiber) =>
+        fiberNames.includes(activeFiber)
+      );
+    });
+    /*const filteredData =
       selectedFiber === "all"
         ? yarnData
         : yarnData.filter((d) =>
             d.details.fibers.some((f) => f.fiber_type_name === selectedFiber)
-          );
-    const washableData = filteredData.filter(
+          );*/
+    const washableData = yarnData.filter(
       (d) => d.details.machine_washable === "TRUE"
     );
-    const nonWashableData = filteredData.filter(
+    const nonWashableData = yarnData.filter(
+      (d) => d.details.machine_washable === "FALSE"
+    );
+    const filteredWashableData = filteredData.filter(
+      (d) => d.details.machine_washable === "TRUE"
+    );
+    const filteredNonWashableData = filteredData.filter(
       (d) => d.details.machine_washable === "FALSE"
     );
 
     const totalWashable = washableData.length;
     const totalNonWashable = nonWashableData.length;
 
+    const totalFilteredWashable = filteredWashableData.length;
+    const totalFilteredNonWashable = filteredNonWashableData.length;
+    //console.log(totalFilteredWashable);
+    //g.selectAll(".median-line").data([medianValue])
+
+    var washPercent = Math.round(
+      (totalFilteredWashable /
+        (totalFilteredNonWashable + totalFilteredWashable)) *
+        100
+    );
+    if (totalFilteredNonWashable + totalFilteredWashable === 0) {
+      washPercent = -1;
+    }
+    const sideLabels = g.selectAll(".side-labels").data([washPercent]);
+
+    sideLabels
+      .enter()
+      .append("text")
+      .attr("class", "side-labels")
+      .attr(
+        "transform",
+        `translate(${margin.right + chartWidth + 80}, ${chartHeight / 2 - 50})`
+      )
+      .merge(sideLabels) //
+      .each(function (d) {
+        // Clear existing tspans to avoid duplication
+        d3.select(this).selectAll("tspan").remove();
+
+        // Add tspans for each line of text
+        d3.select(this)
+          .append("tspan")
+          .text((d) => (d === -1 ? "N/A" : `${d}% Washable`)) // First line
+          .attr("x", 0) // Reset x position
+          .attr("dy", 0); // Keep the first line in the same position
+
+        d3.select(this)
+          .append("tspan")
+          .text((d) => (d === -1 ? "N/A" : `${100 - d}% Not Washable`)) // Second line
+          .attr("x", 0) // Reset x position
+          .attr("dy", "5em"); // Shift second line down
+      });
+    //.text((d) => `${d}% Washable ${100 - d}% Not Washable`);
+
+    /*sideLabels
+      .enter()
+      .append("text")
+      .attr("transform", `translate(0, 40)`)
+      .text(
+        `${(
+          (totalFilteredNonWashable /
+            (totalFilteredNonWashable + totalFilteredWashable)) *
+          100
+        ).toFixed(0)}% Non Washable`
+      );*/
+    sideLabels.exit().remove();
     const ySpacingFactor = 1; // Scaling factor to increase vertical spacing
     const maxWashableSpacing =
       Math.min(chartHeight / 2 / (totalWashable + 1), 30) * ySpacingFactor;
@@ -469,18 +503,13 @@ function createWashScatterplot(fiberWash) {
     circles
       .enter()
       .append("circle")
-      .attr("r", 1)
+      .attr("r", 2)
       .merge(circles)
       .attr("cx", (d) => xScale(d.syntheticPercentage))
       //.attr("cy", (d) => yScale(d.id))
       .attr("cy", (d, i) => {
         // Separate washable and non-washable yarns by the halfway axis
         const halfway = chartHeight / 2;
-        /*const totalWashable = filteredData.filter(
-          (d) => d.details.machine_washable === "TRUE"
-        ).length;
-        const totalNonWashable = filteredData.length - totalWashable;*/
-
         // Calculate y position based on index and washable status
         if (d.details.machine_washable === "TRUE") {
           const index = washableData.indexOf(d);
@@ -490,10 +519,8 @@ function createWashScatterplot(fiberWash) {
           return halfway + (index + 1) * maxNonWashableSpacing; // Distribute below halfway
         }
       })
-
-      //.attr("fill", "steelblue")
       .attr("fill", (d) =>
-        d.details.machine_washable === "TRUE" ? "blue" : "red"
+        d.details.machine_washable === "TRUE" ? "#80b1d3" : "#fb8072"
       )
       .on("mouseover", function (event, d) {
         const fibersInfo = Object.values(d.details.fibers)
@@ -520,7 +547,7 @@ function createWashScatterplot(fiberWash) {
     const medianLine = g.selectAll(".median-line").data([medianValue]); // Single element for the line
 
     // Add or update the median line
-    medianLine
+    /*medianLine
       .enter()
       .append("line")
       .attr("class", "median-line")
@@ -535,59 +562,46 @@ function createWashScatterplot(fiberWash) {
       .attr("x1", (d) => xScale(d))
       .attr("x2", (d) => xScale(d));
 
-    medianLine.exit().remove();
+    medianLine.exit().remove();*/
   }
-
-  // Create checkboxes
-  /*const checkboxes = d3
-    .select("#filters")
-    .selectAll("div")
-    .data(Object.keys(fiberSource))
-    .enter()
-    .append("div");
-
-  checkboxes
-    .append("input")
-    .attr("type", "checkbox")
-    .attr("id", (d) => d)
-    .attr("value", (d) => d)
-    .property("checked", true);
-
-  checkboxes
-    .append("label")
-    .attr("for", (d) => d)
-    .text((d) => d);*/
 
   // Filter yarn data when checkboxes are updated
   const buttons = d3
     .select("#vis3-buttons")
     .selectAll(".button-container button, .label-container button");
 
-  buttons.on("click", function () {
+  /*buttons.on("click", function () {
     const selectedFiber = this.dataset.filter; //"Cotton"
     buttons.classed("active", false);
     d3.select(this).classed("active", true);
-    updateChart(selectedFiber);
-  });
-  /*d3.selectAll("input[type='checkbox']").on("change", () => {
-    const activeFibers = d3
-      .selectAll("input[type='checkbox']")
-      .filter(function () {
-        return this.checked;
-      })
-      .data();
+    updateChart(selectedFiber); // get all that are selected
+    const button = d3.select(this);
+    const isActive = button.classed("active");
+  
+  // Set the active state to the opposite of the current state
+    button.classed("active", !isActive);
 
-    const filteredData = yarnData.filter((d) =>
-      d.fibers((f) => activeFibers.includes(f.fiberType))
-    );
-    d3.selectAll;
-
-    updateScatterplot(filteredData);
   });*/
-  //const fiberTypes = Object.keys(fiberSource);
-  //createRadioButtons(fiberTypes, "#filters", updateScatterplot);
-  // Initial rendering of scatterplot
-  updateChart("all");
+  buttons.on("click", function (event, d) {
+    const button = d3.select(this);
+    const isActive = button.classed("active");
+
+    button
+      .classed("active", !isActive)
+      .attr("data-active", isActive ? "false" : "true");
+
+    /*const activeFibers = buttons
+      .filter(function (button) {
+        return button.classed("active") === "true";
+      })
+      .data();*/
+
+    // go through buttons and add to array
+    //const activeFibers = ["Nylon"];
+    updateChart();
+  });
+
+  updateChart();
 }
 
 // change names of things...later
@@ -598,7 +612,7 @@ function createRatingsChart(fiberRatings) {
   // SVG dimensions
   const width = 1000;
   const height = 600;
-  const margin = { top: 20, right: 30, bottom: 20, left: 50 };
+  const margin = { top: 20, right: 30, bottom: 20, left: 70 };
 
   const svg = d3.select("#vis2").attr("width", width).attr("height", height);
 
@@ -607,9 +621,9 @@ function createRatingsChart(fiberRatings) {
 
   const chartGroup = svg
     .append("g")
-    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+    .attr("transform", `translate(${margin.left + 30}, ${margin.top})`);
 
-  const tooltip = d3.select(".tooltip");
+  //const tooltip = d3.select(".tooltip");
 
   // Scales
   const xScale = d3.scaleBand().range([0, chartWidth]).padding(0.1);
@@ -624,11 +638,29 @@ function createRatingsChart(fiberRatings) {
 
   chartGroup
     .append("g")
-    .attr("class", "x-axis")
+    .attr("class", "vis2-x-axis")
     .attr("transform", `translate(0, ${chartHeight})`)
-    .call(xAxis);
+    .call(xAxis)
+    .append("text")
+    .attr("x", chartWidth / 2)
+    .attr("y", 40)
+    .attr("fill", "black")
+    .attr("text-anchor", "middle")
+    .text("Fiber Percentage");
 
-  chartGroup.append("g").attr("class", "y-axis").call(yAxis);
+  chartGroup
+    .append("g")
+    .attr("class", "vis2-y-axis")
+
+    .call(yAxis)
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("transform", "rotate(-90)")
+    .attr("y", -margin.left + 10)
+    .attr("x", -chartHeight / 2)
+    .attr("fill", "black")
+    .attr("text-anchor", "middle")
+    .text("Yarn Count");
 
   const ratingRanges = [
     "4.9-5.0",
@@ -642,7 +674,17 @@ function createRatingsChart(fiberRatings) {
   ];
 
   const colorPalette = [
-    "#5e4fa2",
+    "#081d58",
+    "#253494",
+    "#225ea8",
+    "#1d91c0",
+    "#41b6c4",
+    "#7fcdbb",
+    "#c7e9b4",
+    "#edf8b1",
+    "#ffffd9",
+    //081d58
+    /*#5e4fa2",
     "#3288bd",
     "#1a9850",
     "#66bd63",
@@ -650,11 +692,9 @@ function createRatingsChart(fiberRatings) {
     "#d9ef8b",
     "#d9ef8b",
     "#fee08b",
-    "#fdae61",
+    "#fdae61"*/
     // Gradient for ranges above 3.0
   ];
-  //const colorPalette = d3.range(10).map((i) => d3.interpolateBlues(i / 9));
-  //const colorScale = d3.scaleSequential(d3.interpolateViridis).domain([3, 5]);
 
   // Create an ordinal scale for the colors
   const colorScale = d3.scaleOrdinal().domain(ratingRanges).range(colorPalette);
@@ -703,13 +743,24 @@ function createRatingsChart(fiberRatings) {
 
     // Add text label
     legendItem
+
       .append("text")
       .attr("x", 20) // Position text to the right of the square
       .attr("y", 12) // Vertically align with the square
       .style("font-size", "12px")
       .text(range);
   });
-
+  const tooltip = d3
+    .select("body")
+    .append("div")
+    .style("position", "absolute")
+    .style("background", "rgba(0, 0, 0, 0.7)")
+    .style("color", "white")
+    .style("padding", "8px")
+    .style("border-radius", "4px")
+    .style("pointer-events", "none")
+    .style("visibility", "hidden")
+    .style("font-size", "12px");
   // Update chart
   function updateChart(fiber) {
     const data = fiberRatings[fiber];
@@ -731,9 +782,6 @@ function createRatingsChart(fiberRatings) {
     const binGenerator = d3
       .bin()
       .domain([1, 100]) // Percentage range
-      // 100 to 91%
-      // 90% to 81%
-      // 10 to 1%
       .thresholds([...d3.range(1, 101, 10)])
       //.thresholds(d3.range(1, 101, 10)) // Create bins (1-10%, 11-20%, ..., 91-100%)
       .value((d) => d.percentage); // Use "percentage" to bin data
@@ -744,7 +792,7 @@ function createRatingsChart(fiberRatings) {
 
     const binnedCount = temp1.map((bin) => {
       const x1 = bin.x1 === 100 ? 100 : bin.x1 - 1;
-      const percentage = `${x1}%-${bin.x0}%`; // === 100 ? 100 : bin.x1 - 1}`;
+      const percentage = `${x1}-${bin.x0}%`; // === 100 ? 100 : bin.x1 - 1}`;
       const counts = bin.length > 0 ? d3.sum(bin, (d) => d.counts) : 0;
       return { percentage, counts, x0: bin.x0, x1: bin.x1 };
     });
@@ -753,7 +801,7 @@ function createRatingsChart(fiberRatings) {
 
     const binnedRatings = temp2.map((bin) => {
       const x1 = bin.x1 === 100 ? 100 : bin.x1 - 1;
-      const percentage = `${x1}%-${bin.x0}%`; // === 100 ? 100 : bin.x1 - 1}`;
+      const percentage = `${x1}-${bin.x0}%`; // === 100 ? 100 : bin.x1 - 1}`;
       const ratings = bin.length > 0 ? d3.mean(bin, (d) => d.ratings) : 0;
       return { percentage, ratings, x0: bin.x0, x1: bin.x1 };
     });
@@ -773,8 +821,8 @@ function createRatingsChart(fiberRatings) {
     yScale.domain([0, maxCount]);
 
     // Update y-axis
-    d3.select(".x-axis").transition().duration(750).call(xAxis);
-    d3.select(".y-axis").transition().duration(750).call(yAxis);
+    d3.select(".vis2-x-axis").transition().duration(750).call(xAxis);
+    d3.select(".vis2-y-axis").transition().duration(750).call(yAxis);
 
     // Bind data
     const bars = chartGroup
@@ -791,15 +839,31 @@ function createRatingsChart(fiberRatings) {
       .attr("width", xScale.bandwidth()) // Width matches space between ticks
       .attr("height", 0) // Start with no height
       .merge(bars) // Merge enter + update phases
+      .on("mouseover", function (event, d) {
+        tooltip
+          .style("visibility", "visible")
+          .html(
+            `<strong>Average Rating: </strong><br>${
+              Math.round(d.rating * 10) / 10
+            }`
+          );
+      })
+      .on("mousemove", function (event) {
+        tooltip
+          .style("top", event.pageY + 10 + "px")
+          .style("left", event.pageX + 10 + "px");
+      })
+      .on("mouseout", function () {
+        tooltip.style("visibility", "hidden");
+      })
       .transition()
       .duration(750)
       .attr("x", (d) => xScale(d.percentage))
       .attr("y", (d) => yScale(d.counts))
       .attr("width", xScale.bandwidth())
       .attr("height", (d) => chartHeight - yScale(d.counts))
-
       .attr("fill", (d) => {
-        const ratingRange = getRatingRange(d.rating); // Get the rating range for this bar
+        const ratingRange = getRatingRange(Math.round(d.rating * 10) / 10); // Get the rating range for this bar
         return colorScale(ratingRange); // Use the colorScale to assign a color
       });
 
@@ -807,6 +871,7 @@ function createRatingsChart(fiberRatings) {
     bars.exit().transition().duration(750).attr("height", 0).remove();
 
     // Add labels
+    const total = binnedData.values().reduce((sum, count) => sum + count, 0);
     const labels = chartGroup
       .selectAll(".label")
       .data(binnedData, (d) => d.percentage);
@@ -821,16 +886,17 @@ function createRatingsChart(fiberRatings) {
       .attr("x", (d) => xScale(d.percentage) + xScale.bandwidth() / 2)
       .attr("y", (d) => yScale(d.counts) - 5)
       .attr("text-anchor", "middle")
-      .text((d) => (d.counts > 0 ? d.counts.toFixed(1) : ""));
+      .text(
+        (d) =>
+          `${d.counts} (${(
+            (d.counts / d3.sum(Object.values(data.percentageCounts))) *
+            100
+          ).toFixed(1)}%)`
+      );
 
     labels.exit().remove();
   }
 
-  // Dropdown change handler
-  /*dropdown.on("change", function () {
-    const selectedFiber = d3.select(this).property("value");
-    updateChart(selectedFiber);
-  });*/
   const buttons = d3
     .select("#vis2-buttons")
     .selectAll(".button-container button, .label-container button");
@@ -842,11 +908,9 @@ function createRatingsChart(fiberRatings) {
     updateChart(selectedFiber);
   });
 
-  // Initialize chart with the first fiber
-  updateChart(fibers[0]);
+  updateChart("Nylon");
 }
 
-//////////////// DON"T TOUCH ///////
 function createSplitBarchart(yarnBlend) {
   // create dictionary of animal fiber and synthetic fiber
 
@@ -859,29 +923,9 @@ function createSplitBarchart(yarnBlend) {
     ...yarnBlend.values().flatMap((obj) => obj.values())
   );
 
-  // Set up the SVG canvas dimensions
-
-  /* const margin = { top: 20, right: 30, bottom: 50, left: 50 };
-
-  const svg = d3.select("#vis2").attr("width", width).attr("height", height);
-
-  const chartWidth = width - margin.left - margin.right;
-  const chartHeight = height - margin.top - margin.bottom - 100;
-
-  const chartGroup = svg
-    .append("g")
-    .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-  const tooltip = d3.select(".tooltip");
-
-  // Scales
-  const xScale = d3.scaleBand().range([0, chartWidth]).padding(0.1);
-
-  const yScale = d3.scaleLinear().range([chartHeight, 0]);*/
-
   const width = 1000;
   const height = 600;
-  const margin = { top: 20, right: 30, bottom: 20, left: 50 };
+  const margin = { top: 20, right: 80, bottom: 30, left: 100 };
   const chartWidth = width - margin.left - margin.right - 200;
   const chartHeight = height - margin.top - margin.bottom - 100;
 
@@ -894,23 +938,47 @@ function createSplitBarchart(yarnBlend) {
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  /* */
   // Create scales
   //const xScale = d3.scaleLinear().range([0, width]);
   const xScale = d3.scaleLinear().domain([0, maxCount]).range([0, chartWidth]); // Fixed domain
   const yScale = d3.scaleBand().range([0, chartHeight]).padding(0.1);
-
+  const xAxis = d3.axisBottom(xScale);
+  const yAxis = d3.axisLeft(yScale);
   // Add axes groups
-  const xAxisGroup = chartGroup
-    .append("g")
-    .attr("transform", `translate(0, ${chartHeight})`);
 
-  const yAxisGroup = chartGroup.append("g");
+  chartGroup
+    .append("g")
+    .attr("class", "vis1-x-axis")
+
+    .attr("transform", `translate(0, ${chartHeight})`)
+    .call(xAxis)
+    .append("text")
+    .attr("class", "axis-style")
+    .attr("x", chartWidth / 2)
+    .attr("y", 40)
+    .attr("fill", "black")
+    .attr("text-anchor", "middle")
+    .text("Yarn Count");
+
+  chartGroup
+    .append("g")
+    .attr("class", "vis1-y-axis")
+
+    .call(yAxis)
+    .append("text")
+    .attr("class", "axis-style")
+    .attr("text-anchor", "middle")
+    .attr("transform", "rotate(-90)")
+    .attr("y", -margin.left + 10)
+    .attr("x", -chartHeight / 2)
+    .attr("fill", "black")
+    .attr("text-anchor", "middle")
+    .text("Fiber");
   // Color mapping for blend types
   const blendColors = {
-    "Natural-Natural": "#66c2a5", // Green
-    "Synthetic-Natural": "#fc8d62", // Orange
-    "Synthetic-Synthetic": "#8da0cb", // Blue
+    "Synthetic-Synthetic": "#80b1d3", // Blue
+    "Natural-Natural": "#b3de69", // Green
+    "Synthetic-Natural": "#fb8072", // Red
     Other: "#cccccc", // Gray
   };
 
@@ -925,7 +993,7 @@ function createSplitBarchart(yarnBlend) {
     .attr("class", "legend")
     .attr(
       "transform",
-      `translate(${margin.right + chartWidth + 80}, ${margin.top})`
+      `translate(${margin.right + chartWidth + 120}, ${margin.top})`
     ); // Move to the right of the chart // Move to the right of the chart
 
   // Add legend items vertically
@@ -948,6 +1016,7 @@ function createSplitBarchart(yarnBlend) {
     // Add text label
     legendItem
       .append("text")
+
       .attr("x", 20) // Position text to the right of the square
       .attr("y", 12) // Vertically align with the square
       .style("font-size", "12px")
@@ -1044,29 +1113,9 @@ function createSplitBarchart(yarnBlend) {
     labels.exit().remove();
 
     // Update axes
-    xAxisGroup.transition().duration(750).call(d3.axisBottom(xScale));
-    yAxisGroup.transition().duration(750).call(d3.axisLeft(yScale));
+    d3.select(".vis1-x-axis").transition().duration(750).call(xAxis);
+    d3.select(".vis1-y-axis").transition().duration(750).call(yAxis);
   }
-
-  // Populate dropdown menu
-  /*const dropdown = d3.select("#fiber-select");
-  dropdown
-    .selectAll("option")
-    .data(fibers)
-    .enter()
-    .append("option")
-    .attr("value", (d) => d)
-    .text((d) => d);*/
-
-  // Initialize the chart with the first fiber
-
-  updateChart(fibers[0]);
-
-  // Update chart on dropdown change
-  /*dropdown.on("change", function () {
-    const selectedFiber = this.value;
-    updateChart(selectedFiber);
-  });*/
 
   const buttons = d3
     .select("#vis1-buttons")
@@ -1078,4 +1127,7 @@ function createSplitBarchart(yarnBlend) {
     d3.select(this).classed("active", true);
     updateChart(selectedFiber);
   });
+
+  // Initialize chart with the first fiber
+  updateChart("Nylon");
 }
