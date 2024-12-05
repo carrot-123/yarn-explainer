@@ -13,21 +13,24 @@
     <h1>Untangling Yarn</h1>
     <h3>By Caroline Wang</h3>
     <div class="explainer-text">
-      For knitters and crocheters, choosing the right yarn for a project is one of the most important decisions to make. To understand what yarn is out there, I analyzed a yarn database pulled from Ravelry, a community and documentation site for knitters, crocheters, and all yarn enthusiasts. 
+      For knitters and crocheters, choosing the right yarn for a project is one of the most important decisions to make. To see what kinds of yarn are out there, I analyzed a yarn database pulled from Ravelry, a community and documentation site for knitters, crocheters, and all yarn enthusiasts. 
       <br>
       <br>
-      To understand yarn, we must first understand fiber. Fiber is the material that yarn is made out of, and can be broken into two categories: natural and synthetic. Natural fibers, such as merino or cotton, come from natural sources, like animals or plants. Synthetic fibers, like nylon or polyester, are synthetically made in a lab. Yarn can be made up of different blends of fibers, or just one type of fiber. This article will investigate which fibers are most commonly together and why.
+      To understand yarn, we must first understand fiber. Fiber is the material that makes up yarn and can be broken into two categories: natural and synthetic. Natural fibers, such as merino or cotton, come from natural sources, like animals or plants. Synthetic fibers, like nylon or polyester, are synthetically made in a lab. Yarn can be made up of different blends of fibers or just one type of fiber. This article will investigate which fibers are most commonly blended together and why.
     </div>
     <h2>Which Fibers are Blended Together?</h1>
       <div class="explainer-text">
-        The visualization below shows which fibers are commonly blended together. To interact with the graph, click on a fiber to see how many yarns blend that fiber with another fiber. 
+        The visualization below can be interacted with, where clicking on a fiber reveals which other fibers it is commonly blended with. The "other" category consists of fibers labeled as "other" on Ravelry, and few niche fibers, such as camel.
         <br>
-        <br>  
-        As a starting point, we can look at 
+        <br>
+        From the visualization, we can look at 
         <button id="vis1-as-text-nylon" class="as-text">nylon</button> 
-        specifically and see that most yarns will blend it with natural fibers, the most common being merino. Meanwhile, there are not as many yarns blending nylon with other synthetic fibers, and even less yarns that are made purely from nylon. Other synthetic fibers can be found in a variety of both synthetic and natural fiber blends. <strong>In contrast, many </strong>
+        and see that 12,724 yarns contain both nylon and merino fibers, and that 33.7% of yarns with nylon also contain merino. Nylon is blended most commonly with natural fibers. Meanwhile, there are not as many yarns blending nylon with other synthetic fibers, and even less yarns that are made purely from nylon. 
+        <br>
+        <br>
+        <strong>In contrast, many </strong>
         <button id="vis1-as-text-merino" class="as-bold-text">natural fibers</button> 
-        <strong> are found by themselves, or blended with other natural fibers. When they are blended with synthetic fibers, nylon is a top choice.</strong> 
+        <strong> are found purely by themselves, or they are blended with other natural fibers. When they <i>are</i> blended with synthetic fibers, nylon is a top choice.</strong> 
       </div>
     <div class="button-filters" id="vis1-buttons">
       <div class="label-container">
@@ -59,12 +62,13 @@
     <svg id="vis1" width="800" height="600"></svg>
    
     <h2>Which Fibers are Highly Rated?</h1>
-      <div class="explainer-text">To understand why natural fibers are most commonly blended with each other, we can investigate the average yarn ratings given by Ravelry users. In the visualization below, click on a fiber to see how many yarns contain a certain percentage of that fiber, and the average rating those yarns received. Yarns that received fewer than 50 ratings are excluded from this visualization. Note the changing y-axis.
+      <div class="explainer-text">To understand why natural fibers are most commonly blended with each other, we can investigate the average yarn ratings given by Ravelry users. In the visualization below, click on a fiber to see how many yarns contain a certain percentage of that fiber, and the average rating those yarns received. The percentage in the parentheses indicate what percentage of yarns that contain the selected fiber are composed of the fiber at the percentage indicated by the x-axis. Yarns that received fewer than 50 ratings are excluded from this visualization. Note the changing y-axis.
         <br>
         <br> 
-        Again as a starting point, we can see that the majority of yarns which contain 
-        <button id="vis2-as-text-nylon" class="as-text">nylon</button> 
-         have it at a low percentage, and the lower the percentage of nylon present, the higher the yarn's rating. Similar trends can be observed with 
+        Again, we can look at 
+        <button id="vis2-as-text-nylon" class="as-text">nylon</button>
+        and see that the majority of yarns which contain this fiber
+         have it at a low percentage. Furthermore, the lower the percentage of nylon that is present, the higher the yarn's rating. Similar trends can be observed with 
          
          <button id="vis2-as-text-rayon" class="as-text">other synthetic fibers</button> 
          . <strong>Meanwhile, </strong>
@@ -73,7 +77,7 @@
          <strong> are more highly rated than synthetic fibers, no matter the percentage.</strong> 
         <br>
         <br> 
-        <strong>This implies that yarns with natural fibers are higher quality than yarns with a lot of synthetic fibers.</strong> Therefore, natural fibers are often blended together to maintain the yarn’s high quality, and synthetic fibers are blended at a lower percentage so as to not compromise the yarn’s quality. 
+        <strong>This implies that yarns with natural fibers are of higher quality than yarns with a lot of synthetic fibers.</strong> Therefore, natural fibers are often blended together to maintain the yarn's high quality, and synthetic fibers are blended at a lower percentage to avoid compromising the yarn's quality. 
         </div>
     <div class="vis">
 
@@ -113,15 +117,15 @@
         <div class="explainer-text">Why are synthetic fibers even used in yarn, despite its lower quality? There are actually many reasons. Synthetic fibers are often a lot cheaper to produce and therefore more affordable. Some people might prefer synthetic fibers if they are avoiding animal products. Another reason, which can be shown through the Ravelry dataset, is that some synthetic fibers are especially durable, like nylon. We saw earlier that nylon is the preferred synthetic fiber when blending with natural fibers. One reason is that nylon can make the yarn more durable, and therefore machine washable. 
           <br>
           <br>
-          The visualization below depicts the top 500 most reviewed yarns and plots them according to the percentage of synthetic and natural fibers it contains, as well as whether it is machine washable. Hovering over the points reveals the yarn’s name and the fibers it is composed of. Multiple fibers can be selected to filter yarns that contain all of those fibers.
+          The visualization below depicts the top 5000 most reviewed yarns and plots them according to the percentage of synthetic and natural fibers it contains, as well as whether it is machine washable. Hovering over the points reveals the yarn's name and the fibers it is composed of. Multiple fibers can be selected to filter yarns that contain all of those fibers. Only a subset of the yarn dataset was plotted to keep the visuzalization legible and renderable.
           <br><br>
           We can see that 
           <button id="vis3-as-text-merino" class="as-text">merino</button>
            is a natural fiber that does okay in the washing machine, where 61% of yarns that contain merino are machine washable. However, if we also select 
            <button id="vis3-as-text-nylon" class="as-text">nylon</button>
-           , we can see that 86% of yarns that contain both merino and nylon are machine washable. The same trends can be seen for nylon and some other natural fibers. <strong>This implies that the presence of nylon can increase the chance that a natural fiber will be machine washable, and therefore more durable. Thus, blending fibers can give yarn the best of both worlds: the durability of some synthetic fibers, and the high quality of natural fibers.</strong> However, it is important to remember that not all synthetic fibers are made equal. Yarns with 
+           , we can see that 86% of yarns that contain both merino and nylon are machine washable. The same trends can be seen for nylon and some other natural fibers. <strong>This implies that the presence of nylon can increase the chance that a natural fiber will be machine washable, and therefore more durable. Thus, blending fibers can give yarn the best of both worlds: the durability of synthetic fibers, and the high quality of natural fibers.</strong> However, it is important to remember that not all synthetic fibers are made equal. Yarns with 
            <button id="vis3-as-text-rayon" class="as-text">rayon</button> 
-            are often not machine washable.
+            are often not machine washable, despite its composition of synthetic fibers.
         </div>
       <div class="button-filters" id="vis3-buttons">
         <div class="label-container">
