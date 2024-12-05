@@ -32,6 +32,8 @@
   gap: 2rem;
   padding-top: 0.4rem;
   padding-bottom: 0.4rem;
+  font-family: "Lato";
+  font-size: 16px;
 }
 .button-container {
   display: flex;
@@ -47,7 +49,7 @@ button {
   padding-top: 0.4rem;
   padding-bottom: 0.4rem;
   font-family: "Lato";
-  font-size: small;
+  font-size: 12px;
 }
 button.active {
   background: #80b1d3; /* Active background color */
@@ -57,28 +59,69 @@ button.active {
   padding-top: 0.4rem;
   padding-bottom: 0.4rem;
   font-family: "Lato";
-  font-size: small;
+  font-size: 12px;
 }
 body {
-  margin-left: 30rem;
-  margin-right: 30rem;
+  margin-left: 25rem;
+  margin-right: 25rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  margin-bottom: 5rem;
 }
 h1 {
+  margin-top: 5rem;
+  font-family: "Montserrat";
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+h2 {
   font-family: "Montserrat";
 }
-body {
-  font-family: "Lato";
-  font-size: medium;
-}
-.axis-style {
-  font-family: "Lato";
-  font-size: small;
+h3 {
+  font-family: "Montserrat";
+  color: gray;
+  padding: 0;
+  margin: 0;
 }
 
 text {
   font-family: "Lato";
-  font-size: small;
+  font-size: 12px;
+}
+.label {
+  font-family: "Lato";
+  font-size: 12px;
+}
+.explainer-text {
+  font-family: "Lato";
+  font-size: 16px;
+  line-height: 160%;
+}
+.as-text {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: "Lato";
+  font-size: 16px;
+  width: fit-content;
+  text-decoration: underline;
+  text-decoration-color: #80b1d3;
+  text-decoration-thickness: 3px;
+}
+.as-bold-text {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: "Lato";
+  font-size: 16px;
+  width: fit-content;
+  text-decoration: underline;
+  text-decoration-color: #80b1d3;
+  text-decoration-thickness: 3px;
 }
